@@ -12,9 +12,9 @@ class Groupscreen extends StatefulWidget {
 }
 
 class _GroupscreenState extends State<Groupscreen> {
+  bool isPressed = false;
   @override
   Widget build(BuildContext context) {
-    bool isPressed = false;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: tabColor,

@@ -24,6 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   FocusNode focusnode = FocusNode();
   bool isSendButton = false;
   List messages = [];
+  ScrollController _myController = ScrollController();
 
   // void sendMessage(String message) {
   //   messages.add(message);
@@ -115,12 +116,43 @@ class _ChatScreenState extends State<ChatScreen> {
             alignment: Alignment.center,
             color: senderMessageColor,
             child: const Text('TODAY',
-                textAlign: TextAlign.center, style: TextStyle(fontSize: 11)),
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 13)),
           ),
           Expanded(
-              child: MessagePage(
-            messages: messages,
-          )),
+              child: ListView.builder(
+                  controller: _myController,
+                  itemCount: messages.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == messages.length) {
+                      return Container(
+                        height: 70,
+                      );
+                    }
+                    return Bubble(
+                      style: BubbleStyle(
+                        borderWidth: 55,
+                      ),
+                      margin: const BubbleEdges.only(top: 10),
+                      alignment: Alignment.topRight,
+                      nip: BubbleNip.rightTop,
+                      color: messageColor,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Text(
+                            messages[index],
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            "02:14",
+                            style: TextStyle(fontSize: 10),
+                          )
+                        ],
+                      ),
+                      showNip: true,
+                    );
+                  })),
           Container(
             alignment: Alignment.bottomCenter,
             padding: EdgeInsets.all(10.0),
@@ -216,8 +248,13 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: IconButton(
                       onPressed: () {
                         if (isSendButton && contr.text.length > 0) {
+                          _myController.animateTo(
+                              _myController.position.maxScrollExtent,
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeOut);
                           setState(() {
                             messages.add(contr.text);
+                            isSendButton = false;
                           });
                         }
                         contr.clear();
