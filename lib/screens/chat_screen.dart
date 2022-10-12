@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'package:bubble/bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp/screens/audio_screen.dart';
 import 'package:whatsapp/screens/camera_page.dart';
@@ -24,9 +25,9 @@ class _ChatScreenState extends State<ChatScreen> {
   bool isSendButton = false;
   List messages = [];
 
-  void sendMessage(String message) {
-    messages.add(message);
-  }
+  // void sendMessage(String message) {
+  //   messages.add(message);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +111,12 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         body: Column(children: [
+          Bubble(
+            alignment: Alignment.center,
+            color: senderMessageColor,
+            child: const Text('TODAY',
+                textAlign: TextAlign.center, style: TextStyle(fontSize: 11)),
+          ),
           Expanded(
               child: MessagePage(
             messages: messages,
@@ -208,8 +215,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   child: IconButton(
                       onPressed: () {
-                        if (isSendButton) {
-                          sendMessage(contr.text);
+                        if (isSendButton && contr.text.length > 0) {
+                          setState(() {
+                            messages.add(contr.text);
+                          });
                         }
                         contr.clear();
                       },

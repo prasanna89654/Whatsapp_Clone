@@ -15,33 +15,32 @@ class _MessagePageState extends State<MessagePage> {
   ScrollController _myController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Bubble(
-          alignment: Alignment.center,
-          color: Colors.grey,
-          child: const Text('TODAY',
-              textAlign: TextAlign.center, style: TextStyle(fontSize: 11)),
-        ),
-        ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return Container(
-              height: 50,
-              child: Bubble(
-                margin: const BubbleEdges.only(top: 10),
-                alignment: Alignment.topRight,
-                nip: BubbleNip.rightTop,
-                color: senderMessageColor,
-                // child: Text(widget.messages![index]),
-                child: Text("Hello"),
-                showNip: true,
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _myController.jumpTo(_myController.position.maxScrollExtent);
+    });
+    return ListView.builder(
+        controller: _myController,
+        itemCount: widget.messages!.length,
+        itemBuilder: (context, index) {
+          return Container(
+            height: 50,
+
+            // color: Colors.red,
+            child: Bubble(
+              style: BubbleStyle(
+                borderWidth: 15,
               ),
-            );
-          },
-          // itemCount: widget.messages!.length,
-        )
-      ],
-    );
+              margin: const BubbleEdges.only(top: 10),
+              alignment: Alignment.topRight,
+              nip: BubbleNip.rightTop,
+              color: messageColor,
+              child: Text(
+                widget.messages![index],
+                style: TextStyle(fontSize: 20),
+              ),
+              showNip: true,
+            ),
+          );
+        });
   }
 }
